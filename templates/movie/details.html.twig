@@ -1,6 +1,29 @@
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Hello MovieController!{% endblock %}#}
+
+{#{% block body %}#}
+{#    <div class="example-wrapper">#}
+{#        {% if movie is not null %}#}
+
+{#            <h1 class="mb-5">Movie : {{ movie.title }}</h1>#}
+
+{#            <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="float-end" />#}
+{#            <ul>#}
+{#                <li>Id : {{ movie.id }}</li>#}
+{#                <li>Released At : {{ movie.releasedAt|date('d M Y') }}</li>#}
+{#                <li>Country : {{ movie.country }}</li>#}
+{#                <li>Genre : {{ movie.genres|map(genre => genre.name)|join(', ') }}</li>#}
+{#            </ul>#}
+{#        {% else %}#}
+{#            <h1>Movie not found</h1>#}
+{#        {% endif %}#}
+{#    </div>#}
+{#{% endblock %}#}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MovieController!{% endblock %}
+{% block title %}Movie : {{ movie.title }}{% endblock %}
 
 {% block body %}
     <div class="example-wrapper">

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie;
 use App\Repository\MovieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +21,8 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{!id<\d+>?1}', name: 'details')]
-    public function details(int $id, MovieRepository $movieRepository): Response
+//    public function details(int $id, MovieRepository $movieRepository): Response
+    public function details(int $id, EntityManagerInterface $entityManager): Response
     {
 //        $movie = [
 //            'title' => 'Star Wars',
@@ -27,7 +30,10 @@ class MovieController extends AbstractController
 //            'genres' => ['Action', 'Adventure', 'Fantasy'],
 //        ];
 
-        $movie = $movieRepository->findOneById($id);
+//        $movie = $movieRepository->findOneById($id);
+
+        $movie = $entityManager->find(Movie::class, $id);
+        $entityManager->getUnitOfWork()->markReadOnly($movie);
 
         return $this->render('movie/details.html.twig', [
             'movie' => $movie,
