@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\EntityFinder;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 
-#[AsDecorator("App\Services\EntityFinder")]
+#[AsDecorator("App\EntityFinder\EntityFinder")]
 class TracableEntityFinder implements EntityFinderInterface
 {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\EntityFinder;
 
 use Doctrine\ORM\EntityManagerInterface;
 
