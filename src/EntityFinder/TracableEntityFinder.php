@@ -13,7 +13,7 @@ class TracableEntityFinder implements EntityFinderInterface
     {
     }
 
-    public function find(string $class, int $id)
+    public function find(string $class, int $id): ?object
     {
         if($this->isLogged) {
             $this->logger->debug(printf("EntityFinder used on Entity %s with id %d", $class, $id));

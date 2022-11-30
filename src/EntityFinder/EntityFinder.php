@@ -11,7 +11,7 @@ class EntityFinder implements EntityFinderInterface
     {
     }
 
-    public function find(string $class, int $id)
+    public function find(string $class, int $id): ?object
     {
         return $this->find($class, $id);
     }

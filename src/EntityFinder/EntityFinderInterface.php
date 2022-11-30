@@ -7,5 +7,5 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.entityfinder')]
 interface EntityFinderInterface
 {
-    public function find(String $class, int $id);
+    public function find(String $class, int $id) : ?object;
 }
