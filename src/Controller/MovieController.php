@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\EntityFinder\EntityFinder;
 use App\EntityFinder\EntityFinderInterface;
-use App\OmdbApi\OmdbApiConsumer;
-use App\OmdbApi\Transformer\MovieTransformer;
+use App\EntityFinder\TracableEntityFinder;
+use App\OmdbApi\Consumer\OmdbApiConsumer;
+use App\OmdbApi\Provider\MovieProvider;
+use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,9 +24,9 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{!id<\d+>?1}', name: 'details')]
-//    public function details(int $id, MovieRepository $movieRepository): Response
+    public function details(int $id, MovieRepository $movieRepository): Response
 //    public function details(int $id, EntityManagerInterface $entityManager): Response
-    public function details(int $id, EntityFinderInterface $entityFinder): Response
+//    public function details(int $id, TracableEntityFinder $entityFinder): Response
     {
 //        $movie = [
 //            'title' => 'Star Wars',
@@ -31,12 +34,12 @@ class MovieController extends AbstractController
 //            'genres' => ['Action', 'Adventure', 'Fantasy'],
 //        ];
 
-//        $movie = $movieRepository->findOneById($id);
+        $movie = $movieRepository->findOneById($id);
 
 //        $movie = $entityManager->find(Movie::class, $id);
 //        $entityManager->getUnitOfWork()->markReadOnly($movie);
 
-        $movie = $entityFinder->find("Movie", $id);
+//        $movie = $entityFinder->find("Movie", $id);
 
         return $this->render('movie/details.html.twig', [
             'movie' => $movie,
@@ -44,16 +47,10 @@ class MovieController extends AbstractController
     }
 
     #[Route('/omdb/{title}', name: 'omdb', methods: ['GET'])]
-    public function omdb(string $title = null, OmdbApiConsumer $omdbApiConsumer, MovieTransformer $movieTransformer): Response
+    public function omdb(string $title = null, MovieProvider $provider): Response
     {
-        if($title !== null) {
-            $movie = $omdbApiConsumer->fetch(OmdbApiConsumer::MODE_TITLE, $title);
-            dump($movie);
-            $movie = $movieTransformer->transform($movie);
-        }
-
         return $this->render('movie/details.html.twig', [
-            'movie' => $movie,
+            'movie' => $provider->getMovie(OmdbApiConsumer::MODE_TITLE, $title)
         ]);
     }
 }

@@ -4,22 +4,20 @@ namespace App\OmdbApi\Transformer;
 
 use App\Entity\Genre;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Polyfill\Intl\Icu\Exception\NotImplementedException;
 
 class GenreTransformer implements DataTransformerInterface
 {
-
-    public function transform(mixed $value): Genre
+    public function transform(mixed $value)
     {
-        $genre = new Genre();
-        $genre->setName($value);
-        $genre->setPoster("N/A");
+        if (!\is_string($value)) {
+            throw new \InvalidArgumentException("Invalid type. Expected string, got ".gettype($value));
+        }
 
-        return $genre;
+        return (new Genre())->setName($value);
     }
 
     public function reverseTransform(mixed $value)
     {
-        throw new NotImplementedException();
+        throw new \RuntimeException("Not implemented.");
     }
 }
