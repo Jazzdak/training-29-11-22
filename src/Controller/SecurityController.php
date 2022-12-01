@@ -19,9 +19,9 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-         if ($this->getUser()) {
-             return $this->redirectToRoute('app_default_index');
-         }
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_default_index');
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -48,12 +48,12 @@ class SecurityController extends AbstractController
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $user->getPlainpassword()
+                    $user->getPlainPassword()
                 )
             );
             $user->eraseCredentials();
 
-            $userRepository->save($user);
+            $userRepository->save($user, true);
 
             return $userAuthenticator->authenticateUser(
                 $user,
@@ -66,4 +66,5 @@ class SecurityController extends AbstractController
             'registrationForm' => $form,
         ]);
     }
+
 }

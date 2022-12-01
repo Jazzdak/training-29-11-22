@@ -28,10 +28,10 @@ class Movie
     #[ORM\Column]
     private ?\DateTimeImmutable $releasedAt = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $price = null;
 
-    #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'movies', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Genre::class, cascade: ['persist'])]
     private Collection $genres;
 
     public function __construct()
@@ -97,7 +97,7 @@ class Movie
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(?int $price): self
     {
         $this->price = $price;
 
@@ -127,10 +127,4 @@ class Movie
 
         return $this;
     }
-
-    public function __toString(): string
-    {
-        return $this->title;
-    }
-
 }

@@ -3,21 +3,28 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CommentRepository::class, readOnly: true)]
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $author = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $comment = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $content = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $postedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
@@ -28,26 +35,50 @@ class Comment
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getAuthor(): ?string
     {
-        return $this->name;
+        return $this->author;
     }
 
-    public function setName(string $name): self
+    public function setAuthor(string $author): self
     {
-        $this->name = $name;
+        $this->author = $author;
 
         return $this;
     }
 
-    public function getComment(): ?string
+    public function getEmail(): ?string
     {
-        return $this->comment;
+        return $this->email;
     }
 
-    public function setComment(string $comment): self
+    public function setEmail(?string $email): self
     {
-        $this->comment = $comment;
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getPostedAt(): ?\DateTimeImmutable
+    {
+        return $this->postedAt;
+    }
+
+    public function setPostedAt(\DateTimeImmutable $postedAt): self
+    {
+        $this->postedAt = $postedAt;
 
         return $this;
     }

@@ -8,12 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BookRepository::class, readOnly: true)]
+#[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue()]
+    #[ORM\Column(type: Types::SMALLINT)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -34,7 +34,7 @@ class Book
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $plot = null;
 
-    #[ORM\OneToMany(mappedBy: 'book', targetEntity: Comment::class, orphanRemoval: true, cascade: ['persist'], fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(mappedBy: 'book', targetEntity: Comment::class, cascade: ['persist'], fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $comments;
 
     public function __construct()

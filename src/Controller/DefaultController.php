@@ -11,12 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     #[Route('', name: 'index')]
-    public function index(MovieRepository $movieRepository): Response
+    public function index(MovieRepository $repository): Response
     {
+        $movies = $repository->findBy([], ['id' => 'DESC'], 6);
 
         return $this->render('default/index.html.twig', [
-            'controller_name' => 'index',
-            'movies' => $movieRepository->findBy([], ['id'=>'desc'], 6)
+            'movies' => $movies
         ]);
     }
 

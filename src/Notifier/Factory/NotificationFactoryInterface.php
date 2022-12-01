@@ -6,5 +6,5 @@ use Symfony\Component\Notifier\Notification\Notification;
 
 interface NotificationFactoryInterface
 {
-    public function createNotification(string $message) :Notification;
+    public function createNotification(string $message): Notification;
 }

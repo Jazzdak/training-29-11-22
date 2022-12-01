@@ -20,8 +20,8 @@ class MovieProvider
     {
         $data = $this->consumer->fetch($mode, $value);
 
-        if (\array_key_exists('Title', $data) && $entity = $this->repository->findOneBy(['title' => $data['Title']])
-
+        if (\array_key_exists('Title', $data)
+            && $entity = $this->repository->findOneBy(['title' => $data['Title']])
         ) {
             return $entity;
         }

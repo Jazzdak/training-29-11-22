@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\EntityFinder\EntityFinder;
-use App\EntityFinder\EntityFinderInterface;
-use App\EntityFinder\TracableEntityFinder;
+use App\Entity\Movie;
 use App\OmdbApi\Consumer\OmdbApiConsumer;
 use App\OmdbApi\Provider\MovieProvider;
-use App\Repository\MovieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,22 +22,10 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{!id<\d+>?1}', name: 'details')]
-    public function details(int $id, MovieRepository $movieRepository): Response
-//    public function details(int $id, EntityManagerInterface $entityManager): Response
-//    public function details(int $id, TracableEntityFinder $entityFinder): Response
+    public function details(int $id, EntityManagerInterface $manager): Response
     {
-//        $movie = [
-//            'title' => 'Star Wars',
-//            'releasedAt' => new \DateTimeImmutable('1977-05-25'),
-//            'genres' => ['Action', 'Adventure', 'Fantasy'],
-//        ];
-
-        $movie = $movieRepository->findOneById($id);
-
-//        $movie = $entityManager->find(Movie::class, $id);
-//        $entityManager->getUnitOfWork()->markReadOnly($movie);
-
-//        $movie = $entityFinder->find("Movie", $id);
+        $movie = $manager->find(Movie::class, $id);
+        $manager->getUnitOfWork()->markReadOnly($movie);
 
         return $this->render('movie/details.html.twig', [
             'movie' => $movie,
@@ -47,7 +33,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/omdb/{title}', name: 'omdb', methods: ['GET'])]
-    public function omdb(string $title = null, MovieProvider $provider): Response
+    public function omdb(string $title, MovieProvider $provider): Response
     {
         return $this->render('movie/details.html.twig', [
             'movie' => $provider->getMovie(OmdbApiConsumer::MODE_TITLE, $title)

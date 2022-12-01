@@ -9,9 +9,8 @@ use Symfony\Component\Notifier\Recipient\RecipientInterface;
 
 class DiscordNotification extends Notification implements ChatNotificationInterface
 {
-
     public function asChatMessage(RecipientInterface $recipient, string $transport = null): ?ChatMessage
     {
-        return ChatMessage::fromNotification($this)->subject($this->subject());
+        return ChatMessage::fromNotification($this)->subject($this->getSubject());
     }
 }

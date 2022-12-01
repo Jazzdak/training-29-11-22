@@ -4,7 +4,7 @@ namespace App\Notifier\Factory;
 
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.notification_factory')]
+#[AutoconfigureTag(name: 'app.notification_factory')]
 interface IterableFactoryInterface
 {
     public static function getDefaultIndexName(): string;

@@ -27,15 +27,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 20, nullable: true)]
     private ?string $preferredChannel = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    private ?string $plainpassword = null;
+    private ?string $plainPassword = null;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY)]
+    #[ORM\Column]
     private array $roles = [];
 
     public function getId(): ?int
@@ -91,29 +91,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRoles(): array
-    {
-        return $this->roles;
-    }
-
-    public function eraseCredentials()
-    {
-        $this->plainpassword = null;
-    }
-
-    public function getUserIdentifier(): string
-    {
-        return $this->email;
-    }
-
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    /**
-     * @param string|null $password
-     */
     public function setPassword(?string $password): self
     {
         $this->password = $password;
@@ -121,9 +103,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @param array $roles
-     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -131,39 +130,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function addRole(string $role): self
+    public function eraseCredentials()
     {
-        $this->roles[] = $role;
-
-        return $this;
+        $this->setPlainPassword(null);
     }
 
-    public function removeRole(string $role): self
+    public function getUserIdentifier(): string
     {
-        $key = array_search($role, $this->roles);
-        if(!is_null($key)){
-            unset($this->roles[$key]);
-        }
-
-        return $this;
+        return $this->email;
     }
-
-    /**
-     * @return string|null
-     */
-    public function getPlainpassword(): ?string
-    {
-        return $this->plainpassword;
-    }
-
-    /**
-     * @param string|null $plainpassword
-     */
-    public function setPlainpassword(?string $plainpassword): self
-    {
-        $this->plainpassword = $plainpassword;
-
-        return $this;
-    }
-
 }

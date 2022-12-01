@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +38,23 @@ class MovieRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByTitle(string $title)
+    {
+        $qb = $this->createQueryBuilder('m');
+        $query = $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->like('m.title', $qb->expr()->literal('%'.$title.'%')),
+                $qb->expr()->eq('m.title', $qb->expr()->literal(':title'))
+            )
+        )
+            ->setParameter('title', $title)
+            ->getQuery();
+
+        $query->setHint(Query::HINT_READ_ONLY, true);
+
+        return $query->getOneOrNullResult();
     }
 
 //    /**
