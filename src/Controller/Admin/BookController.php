@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +30,7 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $book->setCreatedBy($this->getUser());
             $entityManager->persist($book);
             $entityManager->flush();
 

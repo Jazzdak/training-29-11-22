@@ -6,6 +6,8 @@ use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Monolog\DateTimeImmutable;
+use Symfony\Component\Validator\Constraints\Date;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
@@ -33,6 +35,12 @@ class Movie
 
     #[ORM\ManyToMany(targetEntity: Genre::class, cascade: ['persist'])]
     private Collection $genres;
+
+    #[ORM\Column(length: 255)]
+    private ?string $age = null;
+
+    #[ORM\ManyToOne]
+    private ?User $createdBy = null;
 
     public function __construct()
     {
@@ -126,5 +134,33 @@ class Movie
         $this->genres->removeElement($genre);
 
         return $this;
+    }
+
+    public function getAge(): ?string
+    {
+        return $this->age;
+    }
+
+    public function setAge(string $age): self
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User|null $createdBy
+     */
+    public function setCreatedBy(?User $createdBy): void
+    {
+        $this->createdBy = $createdBy;
     }
 }

@@ -38,6 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateBirth = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,5 +141,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->email;
+    }
+
+    public function getDateBirth(): ?\DateTimeInterface
+    {
+        return $this->dateBirth;
+    }
+
+    public function setDateBirth(?\DateTimeInterface $dateBirth): self
+    {
+        $this->dateBirth = $dateBirth;
+
+        return $this;
     }
 }

@@ -6,15 +6,20 @@
     <div class="example-wrapper">
         {% if movie is not empty %}
 
-            <h1 class="mb-5">Movie : {{ movie.title }}</h1>
+            {% if is_granted('movie.view',movie) %}
+                <h1 class="mb-5">Movie : {{ movie.title }}</h1>
 
-            <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="float-end" />
-            <ul>
-                <li>Id : {{ movie.id }}</li>
-                <li>Released At : {{ movie.releasedAt|date('d M Y') }}</li>
-                <li>Country : {{ movie.country }}</li>
-                <li>Genre : {{ movie.genres|map(genre => genre.name)|join(', ') }}</li>
-            </ul>
+                <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="float-end" />
+                <ul>
+                    <li>Id : {{ movie.id }}</li>
+                    <li>Released At : {{ movie.releasedAt|date('d M Y') }}</li>
+                    <li>Country : {{ movie.country }}</li>
+                    <li>Country : {{ movie.age }}</li>
+                    <li>Genre : {{ movie.genres|map(genre => genre.name)|join(', ') }}</li>
+                </ul>
+            {% else %}
+                <span>Vous n'avez pas l'âge recquis</span>
+            {% endif %}
         {% else %}
             <h1>Movie not found</h1>
         {% endif %}
