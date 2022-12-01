@@ -16,6 +16,7 @@ class MovieController extends AbstractController
     #[Route('/', name: 'app_admin_movie_index', methods: ['GET'])]
     public function index(MovieRepository $movieRepository): Response
     {
+        $this->isGranted('ROLE_ADMIN');
         return $this->render('admin/movie/index.html.twig', [
             'movies' => $movieRepository->findAll(),
         ]);
@@ -24,6 +25,7 @@ class MovieController extends AbstractController
     #[Route('/new', name: 'app_admin_movie_new', methods: ['GET', 'POST'])]
     public function new(Request $request, MovieRepository $movieRepository): Response
     {
+        $this->isGranted('ROLE_PROVIDER');
         $movie = new Movie();
         $form = $this->createForm(MovieType::class, $movie);
         $form->handleRequest($request);
@@ -43,6 +45,7 @@ class MovieController extends AbstractController
     #[Route('/{id}', name: 'app_admin_movie_show', methods: ['GET'])]
     public function show(Movie $movie): Response
     {
+        $this->isGranted('ROLE_ADMIN');
         return $this->render('admin/movie/show.html.twig', [
             'movie' => $movie,
         ]);
@@ -51,6 +54,7 @@ class MovieController extends AbstractController
     #[Route('/{id}/edit', name: 'app_admin_movie_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Movie $movie, MovieRepository $movieRepository): Response
     {
+        $this->isGranted('ROLE_ADMIN');
         $form = $this->createForm(MovieType::class, $movie);
         $form->handleRequest($request);
 
@@ -69,6 +73,7 @@ class MovieController extends AbstractController
     #[Route('/{id}', name: 'app_admin_movie_delete', methods: ['POST'])]
     public function delete(Request $request, Movie $movie, MovieRepository $movieRepository): Response
     {
+        $this->isGranted('ROLE_ADMIN');
         if ($this->isCsrfTokenValid('delete'.$movie->getId(), $request->request->get('_token'))) {
             $movieRepository->remove($movie, true);
         }
