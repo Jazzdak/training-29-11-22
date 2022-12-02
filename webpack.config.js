@@ -23,7 +23,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .copyFiles({
         from: './assets/images/',
-        to: 'build/images/[path][name].[hash:8].[ext]'
+        to: 'images/[path][name].[hash:8].[ext]'
     })
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
